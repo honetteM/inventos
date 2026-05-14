@@ -1,0 +1,35 @@
+# Dependencies
+backend/vendor/
+mobile/node_modules/
+
+# Environment
+.env
+.env.production
+.env.local
+backend/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/storage/logs/
+
+# Build
+/dist/
+/build/
+/mobile/android/app/build/
+/mobile/ios/build/
+
+# Cache
+/.phpunit.cache
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/

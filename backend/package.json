@@ -1,0 +1,29 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite",
+        "up": "docker compose -f ../docker/docker-compose.yml up -d",
+        "down": "docker compose -f ../docker/docker-compose.yml down",
+        "restart": "docker compose -f ../docker/docker-compose.yml restart",
+        "logs": "docker compose -f ../docker/docker-compose.yml logs -f",
+        "ps": "docker compose -f ../docker/docker-compose.yml ps",
+        "test": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan test",
+        "artisan": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan",
+        "composer": "docker compose -f ../docker/docker-compose.yml run --rm app composer",
+        "npm": "docker compose -f ../docker/docker-compose.yml run --rm app npm",
+        "shell": "docker compose -f ../docker/docker-compose.yml exec app bash",
+        "migrate": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan migrate",
+        "seed": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan db:seed",
+        "key:generate": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan key:generate"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^3.1",
+        "tailwindcss": "^4.0.0",
+        "vite": "^8.0.0"
+    }
+}

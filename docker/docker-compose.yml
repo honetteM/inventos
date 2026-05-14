@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: inventos-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: inventos
+      DB_USERNAME: inventos
+      DB_PASSWORD: inventos_secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ../backend:/var/www/html
+    depends_on:
+      - db
+      - redis
+    networks:
+      - inventos
+
+  nginx:
+    image: nginx:alpine
+    container_name: inventos-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ../backend:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - inventos
+
+  db:
+    image: postgres:16-alpine
+    container_name: inventos-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: inventos
+      POSTGRES_USER: inventos
+      POSTGRES_PASSWORD: inventos_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - inventos
+
+  redis:
+    image: redis:7-alpine
+    container_name: inventos-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - inventos
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  inventos:
+    driver: bridge
