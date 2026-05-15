@@ -10,7 +10,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  timeout: 15000,
+  timeout: 20000,
 });
 
 api.interceptors.request.use(async (config) => {
@@ -27,8 +27,23 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       await clearAuth();
     }
+    if (!error.response) {
+      return retryRequest(error.config, 2);
+    }
     return Promise.reject(error);
   },
 );
+
+async function retryRequest(config: any, maxRetries: number, retryCount = 0): Promise<any> {
+  if (retryCount >= maxRetries) {
+    return Promise.reject(new Error('Network error. Please check your connection.'));
+  }
+  await new Promise((r) => setTimeout(r, 1000 * (retryCount + 1)));
+  try {
+    return await api.request(config);
+  } catch {
+    return retryRequest(config, maxRetries, retryCount + 1);
+  }
+}
 
 export default api;

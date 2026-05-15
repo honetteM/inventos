@@ -63,7 +63,7 @@ export default function RegisterScreen() {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <ThemedView className="flex-1">
         <LinearGradient
           colors={['#0c374b', '#0a7ea4', '#33b5e8']}
@@ -79,29 +79,30 @@ export default function RegisterScreen() {
               contentContainerStyle={{ flexGrow: 1 }}
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
+              bounces={false}
             >
-              <ThemedView className="flex-1 justify-center px-6 py-8">
-                <ThemedView className="items-center mb-6">
-                  <ThemedView className="w-20 h-20 bg-white/20 rounded-3xl items-center justify-center mb-5 border border-white/30 shadow-lg">
-                    <Ionicons name="rocket-outline" size={36} color="#fff" />
+              <ThemedView className="flex-1 justify-center px-6 py-10">
+                <ThemedView className="items-center mb-8">
+                  <ThemedView className="w-24 h-24 bg-white/20 rounded-3xl items-center justify-center mb-6 border border-white/30 shadow-2xl">
+                    <Ionicons name="rocket-outline" size={44} color="#fff" />
                   </ThemedView>
-                  <ThemedText className="text-4xl font-bold text-white tracking-tight">
+                  <ThemedText className="text-5xl font-bold text-white tracking-tight">
                     Get Started
                   </ThemedText>
-                  <ThemedText className="text-white/70 text-base mt-1.5 text-center">
+                  <ThemedText className="text-white/60 text-base mt-2 text-center">
                     Start your journey with InventOS
                   </ThemedText>
                 </ThemedView>
 
-                <ThemedView className="bg-white/95 dark:bg-gray-900/95 rounded-3xl p-6 shadow-2xl border border-white/20 gap-4">
+                <ThemedView className="bg-white/95 dark:bg-gray-900/95 rounded-3xl p-6 shadow-2xl border border-white/20 gap-5">
                   <ThemedView className="gap-1.5">
-                    <ThemedText className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider ml-1">
+                    <ThemedText className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">
                       Full Name *
                     </ThemedText>
-                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border border-gray-200 dark:border-gray-700">
-                      <Ionicons name="person-outline" size={18} color="#9CA3AF" />
+                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border-2 border-gray-200 dark:border-gray-700">
+                      <Ionicons name="person-outline" size={20} color="#9CA3AF" />
                       <TextInput
-                        className="flex-1 h-13 ml-3 text-gray-900 dark:text-white text-base"
+                        className="flex-1 h-14 ml-3 text-gray-900 dark:text-white text-base"
                         placeholder="John Doe"
                         placeholderTextColor="#9CA3AF"
                         value={name}
@@ -112,13 +113,13 @@ export default function RegisterScreen() {
                   </ThemedView>
 
                   <ThemedView className="gap-1.5">
-                    <ThemedText className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider ml-1">
+                    <ThemedText className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">
                       Email *
                     </ThemedText>
-                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border border-gray-200 dark:border-gray-700">
-                      <Ionicons name="mail-outline" size={18} color="#9CA3AF" />
+                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border-2 border-gray-200 dark:border-gray-700">
+                      <Ionicons name="mail-outline" size={20} color="#9CA3AF" />
                       <TextInput
-                        className="flex-1 h-13 ml-3 text-gray-900 dark:text-white text-base"
+                        className="flex-1 h-14 ml-3 text-gray-900 dark:text-white text-base"
                         placeholder="name@example.com"
                         placeholderTextColor="#9CA3AF"
                         value={email}
@@ -131,13 +132,13 @@ export default function RegisterScreen() {
                   </ThemedView>
 
                   <ThemedView className="gap-1.5">
-                    <ThemedText className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider ml-1">
+                    <ThemedText className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">
                       Phone
                     </ThemedText>
-                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border border-gray-200 dark:border-gray-700">
-                      <Ionicons name="call-outline" size={18} color="#9CA3AF" />
+                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border-2 border-gray-200 dark:border-gray-700">
+                      <Ionicons name="call-outline" size={20} color="#9CA3AF" />
                       <TextInput
-                        className="flex-1 h-13 ml-3 text-gray-900 dark:text-white text-base"
+                        className="flex-1 h-14 ml-3 text-gray-900 dark:text-white text-base"
                         placeholder="+1 (555) 000-0000"
                         placeholderTextColor="#9CA3AF"
                         value={phone}
@@ -149,13 +150,13 @@ export default function RegisterScreen() {
                   </ThemedView>
 
                   <ThemedView className="gap-1.5">
-                    <ThemedText className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider ml-1">
+                    <ThemedText className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">
                       Company Name
                     </ThemedText>
-                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border border-gray-200 dark:border-gray-700">
-                      <Ionicons name="business-outline" size={18} color="#9CA3AF" />
+                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border-2 border-gray-200 dark:border-gray-700">
+                      <Ionicons name="business-outline" size={20} color="#9CA3AF" />
                       <TextInput
-                        className="flex-1 h-13 ml-3 text-gray-900 dark:text-white text-base"
+                        className="flex-1 h-14 ml-3 text-gray-900 dark:text-white text-base"
                         placeholder="Acme Inc."
                         placeholderTextColor="#9CA3AF"
                         value={companyName}
@@ -166,13 +167,13 @@ export default function RegisterScreen() {
                   </ThemedView>
 
                   <ThemedView className="gap-1.5">
-                    <ThemedText className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider ml-1">
+                    <ThemedText className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">
                       Password *
                     </ThemedText>
-                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border border-gray-200 dark:border-gray-700">
-                      <Ionicons name="lock-closed-outline" size={18} color="#9CA3AF" />
+                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border-2 border-gray-200 dark:border-gray-700">
+                      <Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />
                       <TextInput
-                        className="flex-1 h-13 ml-3 text-gray-900 dark:text-white text-base"
+                        className="flex-1 h-14 ml-3 text-gray-900 dark:text-white text-base"
                         placeholder="Min. 8 characters"
                         placeholderTextColor="#9CA3AF"
                         value={password}
@@ -180,10 +181,10 @@ export default function RegisterScreen() {
                         secureTextEntry={!showPassword}
                         editable={!loading}
                       />
-                      <TouchableOpacity onPress={() => setShowPassword(!showPassword)} className="p-1">
+                      <TouchableOpacity onPress={() => setShowPassword(!showPassword)} className="p-1.5">
                         <Ionicons
                           name={showPassword ? 'eye-outline' : 'eye-off-outline'}
-                          size={18}
+                          size={20}
                           color="#9CA3AF"
                         />
                       </TouchableOpacity>
@@ -191,13 +192,13 @@ export default function RegisterScreen() {
                   </ThemedView>
 
                   <ThemedView className="gap-1.5">
-                    <ThemedText className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider ml-1">
+                    <ThemedText className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">
                       Confirm Password *
                     </ThemedText>
-                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border border-gray-200 dark:border-gray-700">
-                      <Ionicons name="shield-checkmark-outline" size={18} color="#9CA3AF" />
+                    <ThemedView className="flex-row items-center bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 border-2 border-gray-200 dark:border-gray-700">
+                      <Ionicons name="shield-checkmark-outline" size={20} color="#9CA3AF" />
                       <TextInput
-                        className="flex-1 h-13 ml-3 text-gray-900 dark:text-white text-base"
+                        className="flex-1 h-14 ml-3 text-gray-900 dark:text-white text-base"
                         placeholder="Repeat your password"
                         placeholderTextColor="#9CA3AF"
                         value={confirmPassword}
@@ -212,18 +213,17 @@ export default function RegisterScreen() {
                     onPress={handleRegister}
                     disabled={loading}
                     activeOpacity={0.85}
-                    className="mt-1"
                   >
                     <LinearGradient
                       colors={loading ? ['#0a7ea499', '#0a7ea499'] : ['#0a7ea4', '#0c374b']}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
-                      className="h-13 rounded-2xl items-center justify-center shadow-lg"
+                      className="h-15 rounded-2xl items-center justify-center shadow-lg shadow-primary/30"
                     >
                       {loading ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color="#fff" size="small" />
                       ) : (
-                        <ThemedText className="text-white text-base font-bold tracking-wide">
+                        <ThemedText className="text-white text-base font-bold tracking-wider">
                           Create Account
                         </ThemedText>
                       )}
@@ -232,7 +232,7 @@ export default function RegisterScreen() {
                 </ThemedView>
 
                 <ThemedView className="flex-row justify-center items-center mt-6 mb-4">
-                  <ThemedText className="text-white/70 text-sm">
+                  <ThemedText className="text-white/60 text-sm">
                     Already have an account?{' '}
                   </ThemedText>
                   <TouchableOpacity onPress={() => router.back()}>
