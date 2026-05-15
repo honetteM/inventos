@@ -19,7 +19,8 @@ trait MultiTenant
         static::addGlobalScope('tenant', function (Builder $builder) {
             $tenantId = static::getTenantId();
             if ($tenantId) {
-                $builder->where('tenant_id', $tenantId);
+                $table = $builder->getModel()->getTable();
+                $builder->where("$table.tenant_id", $tenantId);
             }
         });
     }
