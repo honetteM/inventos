@@ -71,6 +71,16 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
+        if ($request->filled('last_known_updated_at')) {
+            $lastKnown = $request->input('last_known_updated_at');
+            if ($product->updated_at->toISOString() !== $lastKnown) {
+                return response()->json([
+                    'message' => 'Conflict: the product was modified by another user. Please refresh and try again.',
+                    'data' => new ProductResource($product->fresh()->load(['category', 'warehouses'])),
+                ], 409);
+            }
+        }
+
         $product->update($request->validated());
 
         return response()->json([

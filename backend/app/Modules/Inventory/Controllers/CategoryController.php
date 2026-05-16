@@ -65,6 +65,16 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category): JsonResponse
     {
+        if ($request->filled('last_known_updated_at')) {
+            $lastKnown = $request->input('last_known_updated_at');
+            if ($category->updated_at->toISOString() !== $lastKnown) {
+                return response()->json([
+                    'message' => 'Conflict: the category was modified by another user. Please refresh and try again.',
+                    'data' => new CategoryResource($category->fresh()),
+                ], 409);
+            }
+        }
+
         $validated = $request->validate([
             'parent_id' => ['nullable', 'exists:categories,id'],
             'name' => ['sometimes', 'string', 'max:255'],

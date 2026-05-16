@@ -52,6 +52,16 @@ class WarehouseController extends Controller
 
     public function update(Request $request, Warehouse $warehouse): JsonResponse
     {
+        if ($request->filled('last_known_updated_at')) {
+            $lastKnown = $request->input('last_known_updated_at');
+            if ($warehouse->updated_at->toISOString() !== $lastKnown) {
+                return response()->json([
+                    'message' => 'Conflict: the warehouse was modified by another user. Please refresh and try again.',
+                    'data' => new WarehouseResource($warehouse->fresh()),
+                ], 409);
+            }
+        }
+
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'code' => ['nullable', 'string', 'max:50', 'unique:warehouses,code,' . $warehouse->id . ',id,tenant_id,' . $request->user()->tenant_id],

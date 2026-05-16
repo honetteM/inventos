@@ -1,10 +1,13 @@
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import { ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useAuth } from '@/src/context/auth-context';
+import * as inventoryService from '@/src/services/inventory';
+import type { StockSummary } from '@/src/types/inventory';
 
 const quickActions = [
   { icon: 'cube-outline' as const, label: 'Inventory', gradient: ['#0a7ea4', '#0f9cc9'] as const, route: '/(tabs)/inventory' },
@@ -13,21 +16,39 @@ const quickActions = [
   { icon: 'bar-chart-outline' as const, label: 'Reports', gradient: ['#d97706', '#f59e0b'] as const, route: '/(tabs)/profile' },
 ];
 
-const stats = [
-  { label: 'Products', value: '0', icon: 'layers-outline' as const, color: '#0a7ea4' },
-  { label: 'Categories', value: '0', icon: 'folder-outline' as const, color: '#059669' },
-  { label: 'Orders', value: '0', icon: 'cart-outline' as const, color: '#7c3aed' },
-  { label: 'Sales', value: '0', icon: 'trending-up-outline' as const, color: '#d97706' },
-];
-
 export default function HomeScreen() {
   const { user } = useAuth();
+  const [summary, setSummary] = useState<StockSummary | null>(null);
+  const [categoriesCount, setCategoriesCount] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function loadData() {
+    try {
+      const [summaryRes, catsRes] = await Promise.all([
+        inventoryService.getStockSummary().catch(() => null),
+        inventoryService.getCategories({ per_page: 1 }).catch(() => null),
+      ]);
+      if (summaryRes) setSummary(summaryRes.data);
+      if (catsRes?.meta) setCategoriesCount(catsRes.meta.total ?? 0);
+    } catch {}
+  }
+
+  async function onRefresh() {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  }
 
   return (
     <ScrollView
       className="flex-1 bg-gray-50 dark:bg-gray-950"
       contentContainerStyle={{ paddingBottom: 100 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#0a7ea4" />}
     >
       <LinearGradient
         colors={['#0a1f2e', '#0f4e6b', '#0a7ea4']}
@@ -67,17 +88,34 @@ export default function HomeScreen() {
             </ThemedView>
           </ThemedView>
           <ThemedView className="flex-row flex-wrap gap-3">
-            {stats.map((stat) => (
-              <ThemedView key={stat.label} className="flex-1 min-w-[45%] flex-row items-center gap-3">
-                <ThemedView className="w-10 h-10 rounded-xl items-center justify-center" style={{ backgroundColor: `${stat.color}15` }}>
-                  <Ionicons name={stat.icon} size={18} color={stat.color} />
-                </ThemedView>
-                <ThemedView>
-                  <ThemedText className="text-gray-900 dark:text-white text-xl font-bold">{stat.value}</ThemedText>
-                  <ThemedText className="text-gray-400 dark:text-gray-500 text-xs font-medium">{stat.label}</ThemedText>
-                </ThemedView>
+            <ThemedView className="flex-1 min-w-[45%] bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+              <ThemedView className="w-10 h-10 rounded-xl items-center justify-center mb-3" style={{ backgroundColor: '#eefbff' }}>
+                <Ionicons name="layers-outline" size={20} color="#0a7ea4" />
               </ThemedView>
-            ))}
+              <ThemedText className="text-2xl font-bold text-gray-900 dark:text-white">{summary?.total_products ?? 0}</ThemedText>
+              <ThemedText className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Products</ThemedText>
+            </ThemedView>
+            <ThemedView className="flex-1 min-w-[45%] bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+              <ThemedView className="w-10 h-10 rounded-xl items-center justify-center mb-3" style={{ backgroundColor: '#ecfdf5' }}>
+                <Ionicons name="folder-outline" size={20} color="#059669" />
+              </ThemedView>
+              <ThemedText className="text-2xl font-bold text-gray-900 dark:text-white">{categoriesCount}</ThemedText>
+              <ThemedText className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Categories</ThemedText>
+            </ThemedView>
+            <ThemedView className="flex-1 min-w-[45%] bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+              <ThemedView className="w-10 h-10 rounded-xl items-center justify-center mb-3" style={{ backgroundColor: '#fef2f2' }}>
+                <Ionicons name="alert-circle-outline" size={20} color="#dc2626" />
+              </ThemedView>
+              <ThemedText className="text-2xl font-bold text-red-500">{summary?.out_of_stock ?? 0}</ThemedText>
+              <ThemedText className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Out of Stock</ThemedText>
+            </ThemedView>
+            <ThemedView className="flex-1 min-w-[45%] bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+              <ThemedView className="w-10 h-10 rounded-xl items-center justify-center mb-3" style={{ backgroundColor: '#fffbeb' }}>
+                <Ionicons name="trending-up-outline" size={20} color="#d97706" />
+              </ThemedView>
+              <ThemedText className="text-2xl font-bold text-gray-900 dark:text-white">${summary?.total_stock_value?.toFixed(0) ?? '0'}</ThemedText>
+              <ThemedText className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Stock Value</ThemedText>
+            </ThemedView>
           </ThemedView>
         </ThemedView>
       </ThemedView>
