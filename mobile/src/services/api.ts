@@ -1,10 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getToken, clearAuth } from '@/src/storage/secure';
+import { isOnline } from './network';
+import { enqueue } from './queue';
 
 const raw = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.64:8080/api';
 const API_BASE_URL = raw.endsWith('/') ? raw : raw + '/';
 
-const api = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -22,14 +24,29 @@ api.interceptors.request.use(async (config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response: AxiosResponse) => response,
   async (error) => {
     if (error.response?.status === 401) {
       await clearAuth();
     }
+
+    // Network error (offline or timeout) - queue mutation or return cached data
     if (!error.response) {
-      return retryRequest(error.config, 2);
+      const config = error.config;
+      if (config && config.method !== 'get') {
+        const body = config.data ? JSON.parse(config.data) : undefined;
+        await enqueue(config.url.replace(API_BASE_URL, ''), config.method.toUpperCase(), body);
+        return Promise.resolve({
+          data: { message: 'Queued for sync when online', queued: true, offline: true },
+          status: 202,
+          statusText: 'Accepted',
+          headers: {},
+          config,
+        });
+      }
+      return retryRequest(config, 2);
     }
+
     return Promise.reject(error);
   },
 );
