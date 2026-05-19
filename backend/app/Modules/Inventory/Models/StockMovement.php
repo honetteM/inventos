@@ -12,7 +12,7 @@ class StockMovement extends Model
     use HasFactory, MultiTenant;
 
     protected $fillable = [
-        'tenant_id', 'product_id', 'warehouse_id', 'user_id',
+        'tenant_id', 'product_id', 'warehouse_id', 'invoice_id', 'user_id',
         'type', 'quantity', 'before_quantity', 'after_quantity',
         'cost', 'reference', 'notes', 'invoice_url',
     ];

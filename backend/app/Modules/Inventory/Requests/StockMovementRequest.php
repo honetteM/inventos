@@ -16,7 +16,7 @@ class StockMovementRequest extends FormRequest
         return [
             'product_id' => ['required', 'exists:products,id'],
             'warehouse_id' => ['required', 'exists:warehouses,id'],
-            'type' => ['required', 'string', 'in:stock_in,stock_out,adjustment_plus,adjustment_minus,return'],
+            'type' => ['required', 'string', 'in:stock_in,adjustment_plus,adjustment_minus,return'],
             'quantity' => ['required', 'numeric', 'min:0.001'],
             'cost' => ['nullable', 'numeric', 'min:0'],
             'reference' => ['nullable', 'string', 'max:255'],

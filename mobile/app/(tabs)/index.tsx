@@ -11,8 +11,8 @@ import type { StockSummary } from '@/src/types/inventory';
 
 const quickActions = [
   { icon: 'cube-outline' as const, label: 'Inventory', gradient: ['#0a7ea4', '#0f9cc9'] as const, route: '/(tabs)/inventory' },
-  { icon: 'cart-outline' as const, label: 'Orders', gradient: ['#059669', '#06b884'] as const, route: '/(tabs)/orders' },
-  { icon: 'people-outline' as const, label: 'Customers', gradient: ['#7c3aed', '#9b6df0'] as const, route: '/(tabs)/profile' },
+  { icon: 'cart-outline' as const, label: 'Sales', gradient: ['#059669', '#06b884'] as const, route: '/(tabs)/sales' },
+  { icon: 'people-outline' as const, label: 'Customers', gradient: ['#7c3aed', '#9b6df0'] as const, route: '/customers' },
   { icon: 'bar-chart-outline' as const, label: 'Reports', gradient: ['#d97706', '#f59e0b'] as const, route: '/(tabs)/profile' },
 ];
 

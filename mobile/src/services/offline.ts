@@ -6,6 +6,12 @@ import type {
   StockMovement,
   StockSummary,
 } from '@/src/types/inventory';
+import type {
+  InvoiceListItem,
+  CustomerListItem,
+  Quotation,
+  Receipt,
+} from '@/src/types/sales';
 
 function toProduct(row: any): Product {
   return {
@@ -290,4 +296,110 @@ export async function clearAllCache(): Promise<void> {
     DELETE FROM cached_stock_movements;
     DELETE FROM cache_meta WHERE key IN ('products_cached_at', 'categories_cached_at', 'warehouses_cached_at');
   `);
+}
+
+// Invoices cache
+export async function cacheInvoices(invoices: InvoiceListItem[]): Promise<void> {
+  const database = await getDatabase();
+  for (const inv of invoices) {
+    await database.runAsync(
+      `INSERT OR REPLACE INTO cached_invoices
+       (id, invoice_number, customer_name, status, issue_date, total, balance_due, paid_amount, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [inv.id, inv.invoice_number, inv.customer_name, inv.status, inv.issue_date, inv.total, inv.balance_due, inv.paid_amount, inv.created_at]
+    );
+  }
+}
+
+export async function getCachedInvoices(): Promise<InvoiceListItem[]> {
+  const database = await getDatabase();
+  const rows = await database.getAllAsync('SELECT * FROM cached_invoices ORDER BY created_at DESC');
+  return rows as InvoiceListItem[];
+}
+
+export async function getCachedInvoice(id: number): Promise<InvoiceListItem | null> {
+  const database = await getDatabase();
+  const row = await database.getFirstAsync<InvoiceListItem>('SELECT * FROM cached_invoices WHERE id = ?', [id]);
+  return row || null;
+}
+
+export async function cacheInvoice(invoice: InvoiceListItem): Promise<void> {
+  await cacheInvoices([invoice]);
+}
+
+export async function removeCachedInvoice(id: number): Promise<void> {
+  const database = await getDatabase();
+  await database.runAsync('DELETE FROM cached_invoices WHERE id = ?', [id]);
+}
+
+// Customers cache
+export async function cacheCustomers(customers: CustomerListItem[]): Promise<void> {
+  const database = await getDatabase();
+  for (const c of customers) {
+    await database.runAsync(
+      `INSERT OR REPLACE INTO cached_customers
+       (id, name, email, phone, total_purchases, balance, is_active, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [c.id, c.name, c.email, c.phone, c.total_purchases, c.balance, c.is_active ? 1 : 0, c.created_at]
+    );
+  }
+}
+
+export async function getCachedCustomers(): Promise<CustomerListItem[]> {
+  const database = await getDatabase();
+  const rows = await database.getAllAsync('SELECT * FROM cached_customers ORDER BY name ASC');
+  return rows as CustomerListItem[];
+}
+
+export async function getCachedCustomer(id: number): Promise<CustomerListItem | null> {
+  const database = await getDatabase();
+  const row = await database.getFirstAsync<CustomerListItem>('SELECT * FROM cached_customers WHERE id = ?', [id]);
+  return row || null;
+}
+
+export async function cacheCustomer(customer: CustomerListItem): Promise<void> {
+  await cacheCustomers([customer]);
+}
+
+export async function removeCachedCustomer(id: number): Promise<void> {
+  const database = await getDatabase();
+  await database.runAsync('DELETE FROM cached_customers WHERE id = ?', [id]);
+}
+
+// Quotations cache
+export async function cacheQuotations(quotations: Quotation[]): Promise<void> {
+  const database = await getDatabase();
+  for (const q of quotations) {
+    await database.runAsync(
+      `INSERT OR REPLACE INTO cached_quotations
+       (id, quotation_number, customer_name, status, total, currency, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [q.id, q.quotation_number, q.customer?.name || null, q.status, q.total, q.currency, q.created_at]
+    );
+  }
+}
+
+export async function getCachedQuotations(): Promise<Quotation[]> {
+  const database = await getDatabase();
+  const rows = await database.getAllAsync('SELECT * FROM cached_quotations ORDER BY created_at DESC');
+  return rows as unknown as Quotation[];
+}
+
+// Receipts cache
+export async function cacheReceipts(receipts: Receipt[]): Promise<void> {
+  const database = await getDatabase();
+  for (const r of receipts) {
+    await database.runAsync(
+      `INSERT OR REPLACE INTO cached_receipts
+       (id, receipt_number, amount, payment_method, receipt_date, created_at)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [r.id, r.receipt_number, r.amount, r.payment_method, r.receipt_date, r.created_at]
+    );
+  }
+}
+
+export async function getCachedReceipts(): Promise<Receipt[]> {
+  const database = await getDatabase();
+  const rows = await database.getAllAsync('SELECT * FROM cached_receipts ORDER BY created_at DESC');
+  return rows as unknown as Receipt[];
 }

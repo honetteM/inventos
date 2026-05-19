@@ -484,7 +484,7 @@ Tasks:
 
 OCR integration
 invoice scanning
-cloud storage
+claudinary
 invoice categorization
 document search
 PHASE 4 ERROR HANDLING

@@ -7,7 +7,8 @@ import { ThemedText } from '@/components/themed-text';
 const tabs = [
   { id: 'home', segment: 'index', label: 'Home', icon: 'home-outline' as const, activeIcon: 'home' as const },
   { id: 'inventory', segment: 'inventory', label: 'Inventory', icon: 'cube-outline' as const, activeIcon: 'cube' as const },
-  { id: 'orders', segment: 'orders', label: 'Orders', icon: 'cart-outline' as const, activeIcon: 'cart' as const },
+  { id: 'sales', segment: 'sales', label: 'Sales', icon: 'cart-outline' as const, activeIcon: 'cart' as const },
+  { id: 'orders', segment: 'orders', label: 'Orders', icon: 'receipt-outline' as const, activeIcon: 'receipt' as const },
   { id: 'profile', segment: 'profile', label: 'Profile', icon: 'person-outline' as const, activeIcon: 'person' as const },
 ];
 

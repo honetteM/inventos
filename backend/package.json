@@ -16,6 +16,7 @@
         "npm": "docker compose -f ../docker/docker-compose.yml run --rm app npm",
         "shell": "docker compose -f ../docker/docker-compose.yml exec app bash",
         "migrate": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan migrate",
+        "fresh": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan migrate:fresh --force --ansi && docker compose -f ../docker/docker-compose.yml run --rm app php artisan db:seed --force --ansi",
         "seed": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan db:seed",
         "key:generate": "docker compose -f ../docker/docker-compose.yml run --rm app php artisan key:generate"
     },
