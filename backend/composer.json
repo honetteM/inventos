@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "barryvdh/laravel-dompdf": "*",
         "laravel/framework": "^13.8",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
@@ -37,6 +38,14 @@
         }
     },
     "scripts": {
+        "fresh": [
+            "@php artisan migrate:fresh --force --ansi",
+            "@php artisan db:seed --force --ansi"
+        ],
+        "fresh-docker": [
+            "docker exec inventos-app php artisan migrate:fresh --force --ansi",
+            "docker exec inventos-app php artisan db:seed --force --ansi"
+        ],
         "setup": [
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",

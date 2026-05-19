@@ -28,6 +28,8 @@ class RolePermissionSeeder extends Seeder
             'view invoices', 'create invoices', 'edit invoices', 'delete invoices',
             'view quotations', 'create quotations', 'edit quotations', 'delete quotations',
             'view receipts', 'create receipts',
+            // Customers
+            'view customers', 'create customers', 'edit customers', 'delete customers',
             // Accounting
             'view accounts', 'create accounts', 'edit accounts',
             'view journal entries', 'create journal entries',
@@ -53,6 +55,7 @@ class RolePermissionSeeder extends Seeder
             'view invoices', 'create invoices',
             'view quotations', 'create quotations',
             'view receipts', 'create receipts',
+            'view customers', 'create customers', 'edit customers',
             'view expenses', 'create expenses',
             'view reports',
             'view suppliers', 'create suppliers', 'edit suppliers',
@@ -62,6 +65,7 @@ class RolePermissionSeeder extends Seeder
             'view stock', 'move stock',
             'view sales', 'create sales',
             'view invoices', 'create invoices',
+            'view customers', 'create customers',
         ]);
     }
 }

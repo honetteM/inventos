@@ -18,9 +18,10 @@ class StockService
         ?float $cost = null,
         ?string $reference = null,
         ?string $notes = null,
-        ?string $invoiceUrl = null
+        ?string $invoiceUrl = null,
+        ?int $invoiceId = null
     ): StockMovement {
-        return DB::transaction(function () use ($product, $warehouse, $type, $quantity, $cost, $reference, $notes, $invoiceUrl) {
+        return DB::transaction(function () use ($product, $warehouse, $type, $quantity, $cost, $reference, $notes, $invoiceUrl, $invoiceId) {
             $stock = StockWarehouse::firstOrCreate(
                 [
                     'product_id' => $product->id,
@@ -50,6 +51,7 @@ class StockService
                 'tenant_id' => $product->tenant_id,
                 'product_id' => $product->id,
                 'warehouse_id' => $warehouse->id,
+                'invoice_id' => $invoiceId,
                 'user_id' => request()->user()?->id,
                 'type' => $type,
                 'quantity' => $quantity,

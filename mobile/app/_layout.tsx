@@ -46,6 +46,13 @@ function RootContent() {
         <Stack.Screen name="category/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
       <Stack.Screen name="warehouses" options={{ headerShown: false, animation: 'slide_from_bottom', presentation: 'modal' }} />
       <Stack.Screen name="scan-barcode" options={{ headerShown: false, animation: 'slide_from_bottom', presentation: 'modal' }} />
+        <Stack.Screen name="add-invoice" options={{ headerShown: false, animation: 'slide_from_bottom', presentation: 'modal' }} />
+        <Stack.Screen name="add-customer" options={{ headerShown: false, animation: 'slide_from_bottom', presentation: 'modal' }} />
+        <Stack.Screen name="customers" options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name="customer/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name="invoice/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name="receipts" options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name="quotations" options={{ headerShown: false, animation: 'slide_from_right' }} />
     </Stack>
       <NetworkBanner />
     </View>
